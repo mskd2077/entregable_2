@@ -1,0 +1,7 @@
+"0","# Modelo Predictivo: Regresión Lineal"
+"0","modelo <- lm(MAGNITUD ~ PROFUNDIDAD, data = datos_sismicos)"
+"0",""
+"0","# Visualización del Modelo: Diagrama de Dispersión con Línea de Regresión"
+"0","plot(datos_sismicos$PROFUNDIDAD, datos_sismicos$MAGNITUD, "
+"0","     xlab = ""Profundidad"", ylab = ""Magnitud"", "
+"0","     main = ""Relación entre Profundidad y Magnitud con Línea de Regresión"")"

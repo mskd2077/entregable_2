@@ -1,0 +1,2 @@
+"0","# Histograma de Magnitudes"
+"0","hist(datos_sismicos$MAGNITUD, main = ""Distribución de Magnitud de Sismos"", xlab = ""Magnitud"")"

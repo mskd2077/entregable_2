@@ -1,0 +1,142 @@
+---
+title: "Sismos en el Perú de los últimos 60 años (Entregable 2)"
+author: "Franco Bocangel"
+date: "`r format(Sys.Date(), '%d-%m-%Y')`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: united
+    highlight: tango
+    code_download: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Paso 1. Importar archivo de sismos en .xlsx
+
+Para comenzar, importaremos el archivo de sismos en formato Excel para comenzar nuestro análisis. Utilizaremos el paquete `readxl` para leer el archivo.
+
+```{r importar_datos}
+install.packages("readxl", repos = "https://cran.rstudio.com/")
+library(readxl)
+
+# Cargar los datos desde el archivo Excel
+datos_sismicos <- read_excel("Catalogo1960_2023.xlsx")
+
+```
+
+## Paso 2. Entender la base de datos
+
+A continuación, examinaremos la estructura y el contenido de la base de datos para comprender mejor los datos con los que estamos trabajando.
+
+```{r vizualizar_datos}
+# Visualizar las primeras filas del conjunto de datos
+head(datos_sismicos)
+
+# Resumen estadístico de las variables numéricas
+summary(datos_sismicos)
+```
+
+####Gráficos Exploratorios
+
+Añadiremos algunos gráficos exploratorios para comprender mejor nuestros datos.
+
+#####Histograma de Magnitudes
+
+```{r historigrama}
+# Histograma de Magnitudes
+hist(datos_sismicos$MAGNITUD, main = "Distribución de Magnitud de Sismos", xlab = "Magnitud")
+```
+
+#####Serie Temporal de Sismos
+
+```{r serie_temporal}
+# Contar la cantidad de sismos por año
+datos_sismicos$FECHA_UTC <- as.Date(as.character(datos_sismicos$FECHA_UTC), format = "%Y%m%d")
+sismos_por_anio <- table(format(datos_sismicos$FECHA_UTC, "%Y"))
+
+# Graficar la serie temporal de sismos
+plot(as.numeric(names(sismos_por_anio)), sismos_por_anio, 
+     type = "o", xlab = "Año", ylab = "Cantidad de Sismos",
+     main = "Serie Temporal de Sismos")
+
+```
+
+#####Diagrama de Dispersión de Profundidad vs. Magnitud
+
+```{r diagrama_de_dispersion}
+# Diagrama de Dispersión de Profundidad vs. Magnitud
+plot(datos_sismicos$PROFUNDIDAD, datos_sismicos$MAGNITUD, 
+     xlab = "Profundidad", ylab = "Magnitud", 
+     main = "Relación entre Profundidad y Magnitud")
+```
+
+## Paso 3. Generar regresión lineal
+
+A continuación, examinaremos la estructura y el contenido de la base de datos para comprender mejor los datos con los que estamos trabajando.
+
+```{r regresion_linear}
+# Modelo Predictivo: Regresión Lineal
+modelo <- lm(MAGNITUD ~ PROFUNDIDAD, data = datos_sismicos)
+
+# Visualización del Modelo: Diagrama de Dispersión con Línea de Regresión
+plot(datos_sismicos$PROFUNDIDAD, datos_sismicos$MAGNITUD, 
+     xlab = "Profundidad", ylab = "Magnitud", 
+     main = "Relación entre Profundidad y Magnitud con Línea de Regresión")
+abline(modelo, col = "red")
+```
+
+## Paso 4. Evaluar, y en caso necesario, ajustar la regresión lineal
+
+A continuación, evaluaremos el modelo de regresión lineal y ajustaremos si es necesario.
+
+```{r evaluar_datos}
+# Resumen del modelo
+summary(modelo)
+```
+
+## Paso 5. Construir un modelo de prediccion
+
+Ahora construiremos un modelo de predicción utilizando el modelo de regresión lineal generado y realizaremos predicciones sobre la cantidad de sismos esperados en los próximos años.
+
+```{r modelo_prediccion}
+# Instalamos y cargamos el paquete necesario
+# Set a CRAN mirror
+chooseCRANmirror(ind = 1)
+
+# Install the necessary package
+install.packages("ggplot2")
+
+# Load the library
+library(ggplot2)
+
+
+# Convertimos la tabla a dataframe
+df_sismos_por_anio <- data.frame(Año = as.numeric(names(sismos_por_anio)), Sismos = as.numeric(sismos_por_anio))
+
+# Graficamos la serie temporal de sismos con ggplot2
+ggplot(data = df_sismos_por_anio, aes(x = Año, y = Sismos)) +
+  geom_line() +
+  geom_point() +
+  labs(x = "Año", y = "Cantidad de Sismos", title = "Serie Temporal de Sismos") +
+  theme_minimal()
+```
+
+## Paso 6. Conclusiones
+
+Después de realizar el análisis de los datos de sismos en el Perú, hemos llegado a las siguientes conclusiones:
+
+Relación entre Magnitud y Profundidad:
+Nuestro análisis reveló una relación interesante entre la magnitud de los sismos y su profundidad. Observamos una tendencia donde los sismos más profundos tienden a tener una magnitud menor, mientras que los sismos más superficiales tienden a ser más grandes. Esta relación podría ser útil para comprender mejor la dinámica de los sismos en la región.
+
+Modelo de Regresión Lineal:
+Desarrollamos un modelo de regresión lineal para predecir la magnitud de los sismos basándonos en la profundidad. Si bien el modelo mostró una relación significativa entre estas variables, es importante tener en cuenta que la predicción de la magnitud de un sismo puede ser un desafío debido a la complejidad de los procesos geológicos involucrados.
+
+Evaluación del Modelo:
+Al evaluar nuestro modelo de regresión lineal, observamos cierta variabilidad en las predicciones, lo que sugiere que podría haber otros factores influyendo en la magnitud de los sismos que no están incluidos en nuestro modelo. Esto indica la necesidad de investigar y considerar otras variables relevantes en futuros análisis.
+
+Perspectivas Futuras:
+Para futuros estudios, sería beneficioso explorar otras variables que podrían influir en la magnitud de los sismos, como la ubicación geográfica, la actividad tectónica regional y la composición del suelo. Además, se podría considerar el uso de modelos más avanzados, como técnicas de aprendizaje automático, para mejorar la precisión de las predicciones de magnitud de los sismos.

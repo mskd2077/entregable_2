@@ -1,0 +1,44 @@
+"0","# Instalamos y cargamos el paquete necesario"
+"0","# Set a CRAN mirror"
+"0","chooseCRANmirror(ind = 1)"
+"0",""
+"0","# Install the necessary package"
+"0","install.packages(""ggplot2"")"
+"2","WARNING: Rtools is required to build R packages but is not currently installed. Please download and install the appropriate version of Rtools before proceeding:
+
+https://cran.rstudio.com/bin/windows/Rtools/
+"
+"2","Installing package into ‘C:/Users/raulb/AppData/Local/R/win-library/4.4’
+(as ‘lib’ is unspecified)
+"
+"2","probando la URL 'https://cloud.r-project.org/bin/windows/contrib/4.4/ggplot2_3.5.1.zip'
+"
+"2","Content type 'application/zip'"
+"2"," length 5011490 bytes (4.8 MB)
+"
+"2","downloaded 4.8 MB
+
+"
+"1","package ‘ggplot2’ successfully unpacked and MD5 sums checked
+"
+"1","
+"
+"1",""
+"1","The downloaded binary packages are in
+	C:\Users\raulb\AppData\Local\Temp\RtmpWwTF8y\downloaded_packages"
+"1",""
+"1","
+"
+"0","# Load the library"
+"0","library(ggplot2)"
+"0",""
+"0",""
+"0","# Convertimos la tabla a dataframe"
+"0","df_sismos_por_anio <- data.frame(Año = as.numeric(names(sismos_por_anio)), Sismos = as.numeric(sismos_por_anio))"
+"0",""
+"0","# Graficamos la serie temporal de sismos con ggplot2"
+"0","ggplot(data = df_sismos_por_anio, aes(x = Año, y = Sismos)) +"
+"0","  geom_line() +"
+"0","  geom_point() +"
+"0","  labs(x = ""Año"", y = ""Cantidad de Sismos"", title = ""Serie Temporal de Sismos"") +"
+"0","  theme_minimal()"

@@ -1,0 +1,4 @@
+"0","# Diagrama de Dispersión de Profundidad vs. Magnitud"
+"0","plot(datos_sismicos$PROFUNDIDAD, datos_sismicos$MAGNITUD, "
+"0","     xlab = ""Profundidad"", ylab = ""Magnitud"", "
+"0","     main = ""Relación entre Profundidad y Magnitud"")"

@@ -1,0 +1,2 @@
+"0","# Visualizar las primeras filas del conjunto de datos"
+"0","head(datos_sismicos)"
